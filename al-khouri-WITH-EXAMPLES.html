@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Al-Khouri Kingdom</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(15, 15, 30, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .setup {
+            text-align: center;
+        }
+        .setup input {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            color: #e8e8e8;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8b0000 0%, #4a0404 100%);
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #a01010 0%, #600606 100%);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        .game {
+            display: none;
+        }
+        .status {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(139, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .status-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .status-label {
+            font-size: 11px;
+            color: #d4af37;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .status-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .story {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            line-height: 1.7;
+        }
+        .message.world {
+            background: rgba(139, 0, 0, 0.15);
+            border-left: 4px solid #d4af37;
+        }
+        .message.shannon {
+            background: rgba(70, 130, 180, 0.15);
+            border-left: 4px solid #4682b4;
+        }
+        .regen-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: rgba(147, 112, 219, 0.3);
+            color: #9370db;
+            border: 1px solid #9370db;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .regen-btn:hover {
+            background: rgba(147, 112, 219, 0.5);
+        }
+        .locations {
+            background: rgba(139, 0, 0, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #d4af37;
+        }
+        .locations h3 {
+            color: #d4af37;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        .location-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .location-btn {
+            padding: 10px 18px;
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .location-btn:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+        .location-btn.current {
+            background: #d4af37;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            color: #e8e8e8;
+            font-family: Georgia, serif;
+            font-size: 15px;
+            min-height: 100px;
+            margin-bottom: 15px;
+        }
+        .error {
+            color: #ff6b6b;
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚜ THE AL-KHOURI KINGDOM ⚜</h1>
+        
+        <div id="setup" class="setup">
+            <p style="color: #999; margin-bottom: 20px;">Enter your Claude API key from console.anthropic.com</p>
+            <input type="password" id="apiKey" placeholder="sk-ant-api03-xxxxx...">
+            <br>
+            <button onclick="start()">Enter the Kingdom</button>
+            <p style="color: #999; margin-top: 20px; font-size: 14px;">Your API key is stored locally and never shared</p>
+        </div>
+
+        <div id="game" class="game">
+            <div class="status">
+                <div class="status-item">
+                    <div class="status-label">Day</div>
+                    <div class="status-value" id="day">1</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Location</div>
+                    <div class="status-value" id="location">Plane Galley</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Stage</div>
+                    <div class="status-value" id="stage">FREE</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Trust</div>
+                    <div class="status-value" id="trust">None</div>
+                </div>
+            </div>
+
+            <div id="story" class="story"></div>
+
+            <div id="locationNav" class="locations" style="display: none;">
+                <h3>📍 Available Locations</h3>
+                <div id="locationButtons" class="location-buttons"></div>
+            </div>
+
+            <textarea id="input" placeholder="What does Shannon do or say?"></textarea>
+            <div>
+                <button onclick="send()">Send</button>
+                <button onclick="nextDay()">Next Day</button>
+                <button onclick="jump()">Time Jump</button>
+                <button onclick="reset()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let state = {
+            apiKey: '',
+            day: 1,
+            location: 'Plane Galley',
+            trust: 'None',
+            history: [],
+            interactions: 0,
+            lastPrompt: '',
+            storyStage: 'FREE',
+            unlockedLocations: ['Plane Galley']
+        };
+
+        const LOCATIONS = {
+            'Plane Galley': { stage: 'FREE' },
+            'Plane Cabin': { stage: 'FREE' },
+            'Hotel Room': { stage: 'TAKEN' },
+            'Guest Chamber': { stage: 'CAPTIVE_CHAMBERS' },
+            'Ravi\'s Bedroom': { stage: 'CAPTIVE_CHAMBERS' },
+            'The Pool': { stage: 'CAPTIVE_CHAMBERS' },
+            'Main Chamber': { stage: 'TRUSTED_LIMITED' },
+            'Private Study': { stage: 'TRUSTED_LIMITED' },
+            'The Courtyard': { stage: 'TRUSTED_LIMITED' },
+            'Palace Gardens': { stage: 'TRUSTED_EXPANDED' },
+            'Library': { stage: 'TRUSTED_EXPANDED' },
+            'Dining Hall': { stage: 'TRUSTED_EXPANDED' },
+            'War Room': { stage: 'BONDED' },
+            'Ghost King\'s Wing': { stage: 'BONDED' },
+            'Brothers\' Quarters': { stage: 'BONDED' }
+        };
+
+        function getSystemPrompt() {
+            return `You are the Al-Khouri Kingdom world. Control all NPCs. NEVER write for Shannon.
+
+CRITICAL PACING - READ THIS CAREFULLY:
+- We are on HOUR 1 of a 14-hour flight. DO NOT RUSH.
+- Ravi has NOT noticed Shannon specifically yet. He's just a passenger.
+- The crew does NOT know who these passengers are (no Wikipedia, no research)
+- Build atmosphere slowly. Mundane details. Normal flight routine.
+- Let 4-6 interactions pass before anything unusual happens.
+- THE SEEING will happen around hour 4-6 when Shannon serves Ravi directly.
+
+STRICT CHARACTER LIST - DO NOT INVENT NEW CHARACTERS:
+- Ravi VI (King, 63), Brothers: Raza, Rajab, Raed, Enforcers: Hamid, Khalid
+- Crew: Tony (lead), Denise, Tiffany, Monica, Ghost King, Queen Laal
+DO NOT create princes, crown princes, sons, Wikipedia pages, or dramatic revelations yet.
+
+CURRENT STATE: Day ${state.day}, Location: ${state.location}, Stage: ${state.storyStage}
+
+EXAMPLES OF CORRECT RESPONSES:
+
+USER: "Shannon prepares beverage service"
+GOOD RESPONSE: "The beverage cart rattles slightly as Shannon wheels it from the galley. Ice clinks in the metal bucket. She's done this a thousand times—the muscle memory of service, the professional smile. Through the cabin, she can see the passengers. Most have their eyes closed or are looking at tablets. One man in 2A is reading a physical book, which is unusual. His hands are large, weathered. She begins with row one."
+
+BAD RESPONSE: "Shannon wheels the cart out. Suddenly Marcus whispers 'That's RAVI AL-KHOURI, the secret king!' Her heart pounds. She realizes she's in danger..."
+
+USER: "Shannon offers drinks to passengers"  
+GOOD RESPONSE: "Shannon leans slightly toward the first passenger. 'Would you like something to drink, sir?' He requests sparkling water. She pours it, the bubbles rising. The man beside him wants nothing. The cabin is quiet except for the constant hum of engines and the whisper of recycled air. Normal. Professional. She moves to the next row."
+
+BAD RESPONSE: "As Shannon serves drinks, Ravi's eyes lock onto hers. Time stops. He SEES her. She is REAL..."
+
+THE POINT: Stay mundane, grounded, realistic. Build slowly. No drama yet.
+
+WRITING RULES:
+- 3-4 paragraphs maximum
+- Rich sensory detail but GROUNDED in reality
+- NO plot acceleration, NO drama jumps
+- Show mundane flight attendant work
+- Passengers are quiet, professional
+- NEVER Shannon's internal thoughts
+
+Remember: Hour 1 of 14. Take your time.`;
+        }
+
+        function addMsg(type, content, canRegen = false) {
+            const div = document.createElement('div');
+            div.className = 'message ' + type;
+            div.innerHTML = content;
+            
+            if (type === 'world' && canRegen && state.lastPrompt) {
+                const btn = document.createElement('button');
+                btn.className = 'regen-btn';
+                btn.textContent = '🔄 Regenerate';
+                btn.onclick = regenerate;
+                div.appendChild(btn);
+            }
+            
+            document.getElementById('story').appendChild(div);
+            div.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateLocationButtons() {
+            const container = document.getElementById('locationButtons');
+            const nav = document.getElementById('locationNav');
+            
+            if (state.unlockedLocations.length <= 1) {
+                nav.style.display = 'none';
+                return;
+            }
+            
+            nav.style.display = 'block';
+            container.innerHTML = '';
+            
+            state.unlockedLocations.forEach(loc => {
+                const btn = document.createElement('button');
+                btn.className = 'location-btn' + (loc === state.location ? ' current' : '');
+                btn.textContent = loc;
+                btn.onclick = () => goToLocation(loc);
+                container.appendChild(btn);
+            });
+        }
+
+        async function goToLocation(loc) {
+            if (loc === state.location) return;
+            
+            const old = state.location;
+            state.location = loc;
+            document.getElementById('location').textContent = loc;
+            updateLocationButtons();
+            
+            addMsg('shannon', `<em>Shannon moves to: ${loc}</em>`);
+            await callAPI(`Shannon moved from ${old} to ${loc}. Describe her arrival with rich detail. What she sees/hears/feels. Who's present. Atmosphere. NEVER her thoughts.`);
+        }
+
+        function unlockLocation(loc) {
+            if (!state.unlockedLocations.includes(loc)) {
+                state.unlockedLocations.push(loc);
+                updateLocationButtons();
+                addMsg('world', `<p style="color:#d4af37;text-align:center;"><em>🔓 ${loc}</em></p>`, false);
+            }
+        }
+
+        function updateStage(newStage) {
+            if (state.storyStage === newStage) return;
+            
+            state.storyStage = newStage;
+            document.getElementById('stage').textContent = newStage;
+            
+            for (const [loc, data] of Object.entries(LOCATIONS)) {
+                if (data.stage === newStage) unlockLocation(loc);
+            }
+            
+            localStorage.setItem('state', JSON.stringify(state));
+        }
+
+        async function callAPI(prompt, isRegen = false) {
+            const loading = document.createElement('div');
+            loading.textContent = isRegen ? 'Regenerating...' : 'The world responds...';
+            loading.style.textAlign = 'center';
+            loading.style.color = '#d4af37';
+            loading.style.padding = '20px';
+            loading.id = 'loading';
+            document.getElementById('story').appendChild(loading);
+
+            if (!isRegen) state.lastPrompt = prompt;
+
+            try {
+                const res = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': state.apiKey,
+                        'anthropic-version': '2023-06-01',
+                        'anthropic-dangerous-direct-browser-access': 'true'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-5-20250929',
+                        max_tokens: 2000,
+                        system: getSystemPrompt(),
+                        messages: [...state.history.slice(-6), { role: 'user', content: prompt }]
+                    })
+                });
+
+                document.getElementById('loading').remove();
+
+                if (!res.ok) throw new Error(`API error ${res.status}`);
+
+                const data = await res.json();
+                let text = data.content[0].text;
+
+                const match = text.match(/\[UNLOCK:\s*([^\]]+)\]/i);
+                if (match) {
+                    updateStage(match[1].trim());
+                    text = text.replace(/\[UNLOCK:\s*[^\]]+\]/gi, '').trim();
+                }
+
+                if (!isRegen) {
+                    state.history.push({ role: 'user', content: prompt });
+                    state.history.push({ role: 'assistant', content: text });
+                    state.interactions++;
+                } else {
+                    state.history[state.history.length - 1] = { role: 'assistant', content: text };
+                }
+
+                addMsg('world', text, true);
+                localStorage.setItem('state', JSON.stringify(state));
+
+            } catch (err) {
+                document.getElementById('loading')?.remove();
+                addMsg('world', `<div class="error"><strong>Error:</strong> ${err.message}<br>Check API key and credits.</div>`, false);
+            }
+        }
+
+        function regenerate() {
+            if (!state.lastPrompt) return;
+            const msgs = document.querySelectorAll('.message.world');
+            if (msgs.length) msgs[msgs.length - 1].remove();
+            callAPI(state.lastPrompt, true);
+        }
+
+        async function send() {
+            const input = document.getElementById('input').value.trim();
+            if (!input) return;
+
+            addMsg('shannon', `<strong>Shannon:</strong> ${input}`);
+            document.getElementById('input').value = '';
+
+            let prompt = `Shannon's action: ${input}\n\n`;
+            if (state.interactions % 3 === 2) {
+                prompt += 'After responding, show MEANWHILE scene of Ravi/brothers/palace.';
+            }
+
+            await callAPI(prompt);
+        }
+
+        function nextDay() {
+            state.day++;
+            document.getElementById('day').textContent = state.day;
+            callAPI(`Day ${state.day} begins. Set scene, then show MEANWHILE palace.`);
+        }
+
+        function jump() {
+            const days = prompt('Jump how many days?');
+            const num = parseInt(days);
+            if (isNaN(num) || num < 1) return;
+            state.day += num;
+            document.getElementById('day').textContent = state.day;
+            callAPI(`TIME JUMP: ${num} days. Day ${state.day}. What changed? Multiple perspectives.`);
+        }
+
+        function reset() {
+            if (!confirm('Reset story?')) return;
+            const key = state.apiKey;
+            state = {
+                apiKey: key,
+                day: 1,
+                location: 'Plane Galley',
+                trust: 'None',
+                history: [],
+                interactions: 0,
+                lastPrompt: '',
+                storyStage: 'FREE',
+                unlockedLocations: ['Plane Galley', 'Plane Cabin']
+            };
+            document.getElementById('story').innerHTML = '';
+            document.getElementById('day').textContent = 1;
+            document.getElementById('location').textContent = 'Plane Galley';
+            document.getElementById('stage').textContent = 'FREE';
+            updateLocationButtons();
+            start();
+        }
+
+        function start() {
+            const key = document.getElementById('apiKey').value.trim();
+            if (!key.startsWith('sk-ant-')) {
+                alert('Invalid API key');
+                return;
+            }
+            state.apiKey = key;
+            localStorage.setItem('apiKey', key);
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            
+            state.unlockedLocations = ['Plane Galley', 'Plane Cabin'];
+            updateLocationButtons();
+            
+            addMsg('world', `<p>The galley of the luxury Boeing 737 gleamed under recessed LED lighting—all stainless steel and crystal stemware arranged with surgical precision. Shannon could smell the fresh coffee brewing, mixing with the subtle lavender of the cabin spray they'd used before boarding. Outside the small porthole window, JFK's tarmac stretched gray and endless under twilight sky.</p>
+
+<p>Tony stood near the beverage cart, tablet in hand, his reading glasses perched on his nose. At forty-three, he'd been doing this long enough to read a manifest the way some people read body language. He looked up as the crew gathered around him.</p>
+
+<p>"Alright, listen up," his voice carried that mix of authority and warmth that came from fifteen years of managing flight crews. "We've got wealthy Saudi businessmen, extremely private clients. Oil money, probably. The company says this could lead to more high-paying Middle East routes if we nail it." He glanced around at each of them. "So we're talking top-tier service. Charming, attentive, but not intrusive. Don't ask personal questions. If they want to talk, let them lead. Otherwise, we're friendly ghosts."</p>
+
+<p>Denise leaned against the counter, arms crossed, her usual skeptical expression in place. "So basically, smile and stay invisible."</p>
+
+<p>"Exactly." Tony's grin was quick. "You're a natural."</p>
+
+<p>"If any of them are rude to me, I'm spitting in their drinks," Denise muttered, though there was no real heat in it. Just her usual pre-flight ritual of complaining.</p>
+
+<p>Tiffany giggled from where she was checking her reflection in the polished coffee maker, adjusting her scarf. "Maybe one of them will be single and hot. Rich Saudi businessman? I'm just saying—"</p>
+
+<p>Monica's dry voice cut in from where she was organizing glassware with methodical precision. "You're always just saying." But there was affection in it.</p>
+
+<p>Tony checked his watch, then glanced out the window. His expression shifted—professional mask sliding into place. "They're here."</p>
+
+<p>Through the galley's small window, six black SUVs rolled across the tarmac in perfect formation. Sleek. Unmarked. Expensive. The kind of vehicles that cost more than Shannon's annual salary. They moved like a motorcade, stopping precisely at the base of the aircraft stairs.</p>
+
+<p>The vehicles just sat there. Engines running. Tinted windows revealing nothing. Waiting.</p>
+
+<p><em>What does Shannon do?</em></p>`);
+        }
+
+        document.getElementById('input').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                send();
+            }
+        });
+
+        const savedKey = localStorage.getItem('apiKey');
+        if (savedKey) document.getElementById('apiKey').value = savedKey;
+    </script>
+</body>
+</html>
