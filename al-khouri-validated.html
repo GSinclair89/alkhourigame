@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Al-Khouri Kingdom [VALIDATED]</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(15, 15, 30, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .validation-badge {
+            text-align: center;
+            color: #00ff00;
+            font-size: 11px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 5px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 5px;
+        }
+        .setup {
+            text-align: center;
+        }
+        .setup input {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            color: #e8e8e8;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8b0000 0%, #4a0404 100%);
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #a01010 0%, #600606 100%);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        .game {
+            display: none;
+        }
+        .status {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(139, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .status-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .status-label {
+            font-size: 11px;
+            color: #d4af37;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .status-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .story {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            line-height: 1.7;
+        }
+        .message.world {
+            background: rgba(139, 0, 0, 0.15);
+            border-left: 4px solid #d4af37;
+        }
+        .message.shannon {
+            background: rgba(70, 130, 180, 0.15);
+            border-left: 4px solid #4682b4;
+        }
+        .message.validation-error {
+            background: rgba(255, 0, 0, 0.2);
+            border-left: 4px solid #ff0000;
+            color: #ff6b6b;
+            font-size: 14px;
+        }
+        .regen-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: rgba(147, 112, 219, 0.3);
+            color: #9370db;
+            border: 1px solid #9370db;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .regen-btn:hover {
+            background: rgba(147, 112, 219, 0.5);
+        }
+        .locations {
+            background: rgba(139, 0, 0, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #d4af37;
+        }
+        .locations h3 {
+            color: #d4af37;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        .location-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .location-btn {
+            padding: 10px 18px;
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .location-btn:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+        .location-btn.current {
+            background: #d4af37;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            color: #e8e8e8;
+            font-family: Georgia, serif;
+            font-size: 15px;
+            min-height: 100px;
+            margin-bottom: 15px;
+        }
+        .error {
+            color: #ff6b6b;
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .validation-stats {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚜ THE AL-KHOURI KINGDOM ⚜</h1>
+        <div class="validation-badge">✓ VALIDATION SYSTEM ACTIVE</div>
+        
+        <div id="setup" class="setup">
+            <p style="color: #999; margin-bottom: 20px;">Enter your Claude API key from console.anthropic.com</p>
+            <input type="password" id="apiKey" placeholder="sk-ant-api03-xxxxx...">
+            <br>
+            <button onclick="start()">Enter the Kingdom</button>
+            <p style="color: #999; margin-top: 20px; font-size: 14px;">Your API key is stored locally and never shared</p>
+        </div>
+
+        <div id="game" class="game">
+            <div class="status">
+                <div class="status-item">
+                    <div class="status-label">Day</div>
+                    <div class="status-value" id="day">1</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Time</div>
+                    <div class="status-value" id="timeDisplay">6:00 PM</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Location</div>
+                    <div class="status-value" id="location">Plane Galley</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Flight Hour</div>
+                    <div class="status-value" id="flightHour">1/14</div>
+                </div>
+            </div>
+
+            <div class="status" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="status-item">
+                    <div class="status-label">Stage</div>
+                    <div class="status-value" id="stage">FREE</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Violations</div>
+                    <div class="status-value" id="violations" style="color: #00ff00;">0</div>
+                </div>
+            </div>
+
+            <div id="story" class="story"></div>
+
+            <div style="background: rgba(147, 112, 219, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; border: 1px solid #9370db;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <strong style="color: #9370db;">Narrative Phase:</strong> <span id="phaseDisplay">Routine Flight</span><br>
+                        <strong style="color: #9370db;">Tone:</strong> <span id="toneDisplay">routine</span>
+                    </div>
+                    <div>
+                        <strong style="color: #9370db;">Shannon (visible):</strong> <span id="shannonStateDisplay">calm</span><br>
+                        <strong style="color: #9370db;">Last Echo:</strong> <span id="echoDisplay">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="locationNav" class="locations" style="display: none;">
+                <h3>📍 Available Locations</h3>
+                <div id="locationButtons" class="location-buttons"></div>
+            </div>
+
+            <textarea id="input" placeholder="What does Shannon do or say?"></textarea>
+            <div>
+                <button onclick="send()">Send</button>
+                <button onclick="ambient()">⏸ Ambient Scene</button>
+                <button onclick="shiftTone()">🎭 Shift Tone</button>
+                <button onclick="advanceTime(30)">⏭ +30 min</button>
+                <button onclick="setTime()">🕐 Set Time</button>
+                <button onclick="nextDay()">Next Day</button>
+                <button onclick="reset()">Reset</button>
+            </div>
+            <div class="validation-stats" id="validationStats">Validation: monitoring for invented characters • wrong facts • premature events • Shannon's thoughts</div>
+        </div>
+    </div>
+
+    <script>
+        let state = {
+            apiKey: '',
+            day: 1,
+            location: 'Plane Galley',
+            history: [],
+            interactions: 0,
+            lastPrompt: '',
+            storyStage: 'FREE',
+            unlockedLocations: ['Plane Galley'],
+            violations: 0,
+            flightHour: 1,
+            seeingHappened: false,
+            takingHappened: false,
+            
+            // TIME SYSTEM - Real clock, not just "hour 4"
+            timeOfDay: {
+                hour: 18,        // 6:00 PM - evening departure from JFK
+                minute: 0,
+                timezone: 'EST', // Changes to AST when they land
+                display: '6:00 PM'
+            },
+            
+            // EMOTIONAL MEMORY - The connective tissue
+            emotionalState: {
+                lastTone: 'routine',           // routine, tense, intimate, horror, aftermath
+                raviLastAction: null,          // What he last did/said
+                shannonVisibleState: 'calm',   // calm, uneasy, shaken, terrified, numb
+                recentConsequence: null,       // Last major event that should echo
+                atmosphereShift: false         // Did mood just change?
+            },
+            
+            // STORY MOMENTUM - What matters right now
+            currentFocus: 'boarding',          // boarding, service, seeing-moment, extraction-planning, etc.
+            narrativePhase: 'FLIGHT_ACT1',    // Track story progression
+            keyMoments: []                     // Record pivotal scenes
+        };
+
+        const LOCATIONS = {
+            'Plane Galley': { stage: 'FREE' },
+            'Plane Cabin': { stage: 'FREE' },
+            'Hotel Room': { stage: 'TAKEN' },
+            'Guest Chamber': { stage: 'CAPTIVE_CHAMBERS' },
+            'Ravi\'s Bedroom': { stage: 'CAPTIVE_CHAMBERS' },
+            'The Pool': { stage: 'CAPTIVE_CHAMBERS' },
+            'Main Chamber': { stage: 'TRUSTED_LIMITED' },
+            'Private Study': { stage: 'TRUSTED_LIMITED' },
+            'The Courtyard': { stage: 'TRUSTED_LIMITED' },
+            'Palace Gardens': { stage: 'TRUSTED_EXPANDED' },
+            'Library': { stage: 'TRUSTED_EXPANDED' },
+            'Dining Hall': { stage: 'TRUSTED_EXPANDED' },
+            'War Room': { stage: 'BONDED' },
+            'Ghost King\'s Wing': { stage: 'BONDED' },
+            'Brothers\' Quarters': { stage: 'BONDED' }
+        };
+
+        // NARRATIVE PHASES - Story progression with emotional context
+        const NARRATIVE_PHASES = {
+            FLIGHT_ACT1: {
+                name: 'Routine Flight',
+                tone: 'Professional, mundane, safe',
+                focus: 'Service work, crew dynamics, passengers settling',
+                ambientDetails: ['engine hum', 'cabin pressure', 'coffee brewing', 'quiet conversations'],
+                endCondition: 'THE SEEING happens'
+            },
+            FLIGHT_ACT2: {
+                name: 'After the Seeing',
+                tone: 'Tension building, something wrong, unease',
+                focus: 'Ravi watching Shannon, brothers noticing, planning begins',
+                ambientDetails: ['prolonged stares', 'Arabic whispers', 'silence that feels heavy', 'crew sensing oddness'],
+                endCondition: 'Plane lands'
+            },
+            LANDING: {
+                name: 'Ground Operations',
+                tone: 'False safety, calm before storm',
+                focus: 'Deplaning, shuttle to hotel, Shannon thinking she\'s safe',
+                ambientDetails: ['Riyadh heat', 'unfamiliar city', 'exhaustion', 'relief that flight is over'],
+                endCondition: 'The Taking begins'
+            },
+            TAKING: {
+                name: 'The Extraction',
+                tone: 'Horror, disbelief, reality shattering',
+                focus: 'Separation from crew, realization, powerlessness',
+                ambientDetails: ['wrong turns', 'men in uniform', 'crew confusion', 'doors locking'],
+                endCondition: 'Arrives at palace'
+            },
+            CAPTIVITY_EARLY: {
+                name: 'First Days',
+                tone: 'Shock, survival mode, learning horror',
+                focus: 'Understanding her situation, meeting Ravi properly, palace rules',
+                ambientDetails: ['stone walls', 'silence', 'locked doors', 'watching guards'],
+                endCondition: 'Reality fully sinks in'
+            }
+        };
+
+        // TONE MODES - Voice variation within canon
+        const TONE_MODES = {
+            routine: {
+                style: 'Grounded, professional, mundane detail',
+                pacing: 'Steady, unhurried',
+                sensory: 'Ordinary workplace sounds, familiar routines'
+            },
+            tense: {
+                style: 'Clipped sentences, hyperaware detail, wrongness',
+                pacing: 'Quickening, compressed',
+                sensory: 'Everything feels too loud or too quiet, hypervigilance'
+            },
+            intimate: {
+                style: 'Close focus, body language, breath and space',
+                pacing: 'Slowed, magnified moments',
+                sensory: 'Touch, proximity, temperature, heartbeat'
+            },
+            horror: {
+                style: 'Fractured, surreal clarity, can\'t be real',
+                pacing: 'Time distorts, stuttering or rushing',
+                sensory: 'Dissociation, details too sharp, numbness and panic'
+            },
+            aftermath: {
+                style: 'Exhausted, muted, processing',
+                pacing: 'Slow, heavy, trudging through',
+                sensory: 'Dulled senses, body awareness, emptiness'
+            }
+        };
+
+        // VALIDATION RULES - THE ENFORCEMENT LAYER
+        function validateResponse(text) {
+            const violations = [];
+            const textLower = text.toLowerCase();
+
+            // CRITICAL: Check for invented passengers (the #1 problem)
+            const forbiddenPassengers = [
+                'couple', 'couples', 'family', 'families', 'children', 'child',
+                'woman', 'women', 'lady', 'ladies', 'girl', 'girls',
+                'tourist', 'tourists', 'elderly man', 'young man', 'middle-aged',
+                'businessman', 'businessmen', 'random passenger', 'other passengers',
+                'marcus', 'james', 'robert', 'married couple', 'honeymoon'
+            ];
+
+            for (const forbidden of forbiddenPassengers) {
+                const regex = new RegExp('\\b' + forbidden + '\\b', 'i');
+                if (regex.test(text)) {
+                    violations.push({
+                        type: 'CRITICAL',
+                        rule: 'Invented Passengers',
+                        detail: `Found "${forbidden}". ONLY 8-10 Al-Khouri men exist on this private charter. NO couples, families, women, or random passengers.`
+                    });
+                    break; // One violation is enough for this category
+                }
+            }
+
+            // Check for premature SEEING
+            if (state.location.includes('Plane') && !state.seeingHappened && state.flightHour < 4) {
+                const seeingIndicators = [
+                    'ravi.*noticed.*shannon', 'ravi.*locked.*eyes', 'ravi.*stared.*shannon',
+                    'the seeing', 'recognition.*flashed', 'something.*changed.*ravi',
+                    'fixated.*shannon', 'couldn.*look.*away.*shannon'
+                ];
+                
+                for (const pattern of seeingIndicators) {
+                    const regex = new RegExp(pattern, 'i');
+                    if (regex.test(text)) {
+                        violations.push({
+                            type: 'PACING',
+                            rule: 'Premature SEEING',
+                            detail: `THE SEEING cannot happen until Hour 4-6 (currently Hour ${state.flightHour}). Must wait for Shannon to serve Ravi directly during beverage service.`
+                        });
+                        break;
+                    }
+                }
+            }
+
+            // Check for Shannon's internal experience (USER'S DOMAIN)
+            const thoughtPatterns = [
+                /shannon\s+felt\s+(terrified|scared|worried|anxious|confused)/i,
+                /shannon\s+thought\s+/i,
+                /shannon\s+wondered\s+/i,
+                /shannon\s+realized\s+/i,
+                /her\s+mind\s+(raced|spun|wondered)/i,
+                /she\s+felt\s+(a\s+chill|terror|fear|panic)/i
+            ];
+            
+            for (const pattern of thoughtPatterns) {
+                if (pattern.test(text)) {
+                    violations.push({
+                        type: 'ROLEPLAY',
+                        rule: 'Writing Shannon',
+                        detail: 'Claude wrote Shannon\'s internal thoughts/feelings. Only observable actions are allowed - USER controls Shannon\'s mind entirely.'
+                    });
+                    break;
+                }
+            }
+
+            // Check for premature palace references
+            if (state.location.includes('Plane') && !state.takingHappened) {
+                const palaceTerms = [
+                    'palace', 'cistern', 'courtyard execution', 'ghost king appears',
+                    'queen laal', 'handmaiden', 'ravi\'s chambers', 'the circle'
+                ];
+                
+                for (const term of palaceTerms) {
+                    if (textLower.includes(term.toLowerCase())) {
+                        violations.push({
+                            type: 'CONTINUITY',
+                            rule: 'Wrong Location',
+                            detail: `Referenced "${term}" while still on the plane. Palace/kingdom elements cannot appear until AFTER the Taking.`
+                        });
+                        break;
+                    }
+                }
+            }
+
+            // Check for premature Taking
+            if (state.location.includes('Plane') && !state.takingHappened) {
+                const takingTerms = ['she was taken', 'extracted her', 'kidnapped', 'the taking'];
+                for (const term of takingTerms) {
+                    if (textLower.includes(term)) {
+                        violations.push({
+                            type: 'PACING',
+                            rule: 'Premature Taking',
+                            detail: 'The Taking cannot happen until AFTER landing. Currently still on the plane.'
+                        });
+                        break;
+                    }
+                }
+            }
+
+            return violations;
+        }
+
+        function displayViolations(violations) {
+            if (violations.length === 0) return;
+
+            state.violations += violations.length;
+            document.getElementById('violations').textContent = state.violations;
+            
+            if (state.violations > 5) {
+                document.getElementById('violations').style.color = '#ff0000';
+            } else if (state.violations > 2) {
+                document.getElementById('violations').style.color = '#ffb84d';
+            }
+
+            const violationDiv = document.createElement('div');
+            violationDiv.className = 'message validation-error';
+            
+            let html = '<strong>⚠️ VALIDATION FAILURE - Response Rejected</strong><br><br>';
+            violations.forEach((v, i) => {
+                html += `<strong>${i+1}. [${v.type}] ${v.rule}:</strong><br>${v.detail}<br><br>`;
+            });
+            html += '<em>Auto-regenerating with stronger enforcement...</em>';
+            
+            violationDiv.innerHTML = html;
+            document.getElementById('story').appendChild(violationDiv);
+            violationDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getSystemPrompt() {
+            // Get current phase and tone
+            const currentPhase = NARRATIVE_PHASES[state.narrativePhase];
+            const currentTone = TONE_MODES[state.emotionalState.lastTone];
+            
+            let enforcementLevel = '';
+            if (state.violations > 3) {
+                enforcementLevel = `\n\n🚨 CRITICAL: You have violated rules ${state.violations} times. FOCUS:\n- ONLY 8-10 Al-Khouri men exist on plane (Ravi, Raza, Rajab, Raed, Hamid, Khalid, 2-3 guards)\n- NO couples, families, women, children, or random passengers\n- Hour ${state.flightHour}/14: ${state.flightHour < 4 ? 'ROUTINE SERVICE ONLY - NO SEEING YET' : 'THE SEEING CAN HAPPEN NOW'}\n- NEVER write Shannon's thoughts/feelings\n- Private charter = ONLY Al-Khouri group on board\n`;
+            }
+
+            // Build emotional context
+            let emotionalContext = '\n=== EMOTIONAL CONTINUITY ===\n';
+            if (state.emotionalState.raviLastAction) {
+                emotionalContext += `Last Ravi action: ${state.emotionalState.raviLastAction}\n`;
+            }
+            if (state.emotionalState.recentConsequence) {
+                emotionalContext += `Recent event that should echo: ${state.emotionalState.recentConsequence}\n`;
+            }
+            emotionalContext += `Shannon's visible state: ${state.emotionalState.shannonVisibleState} (show through body language, not internal thoughts)\n`;
+            emotionalContext += `Atmosphere: ${state.emotionalState.atmosphereShift ? 'Something just shifted - tension changed' : 'Sustained mood'}\n`;
+
+            const basePrompt = `You are the Al-Khouri Kingdom world. You control ALL NPCs. NEVER write for Shannon.
+
+=== NARRATIVE PHASE: ${currentPhase.name.toUpperCase()} ===
+Tone: ${currentPhase.tone}
+Current Focus: ${currentPhase.focus}
+Ambient Details to weave in: ${currentPhase.ambientDetails.join(', ')}
+Phase ends when: ${currentPhase.endCondition}
+
+=== VOICE & TONE MODE: ${state.emotionalState.lastTone.toUpperCase()} ===
+Writing Style: ${currentTone.style}
+Pacing: ${currentTone.pacing}
+Sensory Focus: ${currentTone.sensory}
+
+${emotionalContext}
+
+=== CURRENT TIME & SETTING ===
+Real time: ${state.timeOfDay.display} ${state.timeOfDay.timezone}
+Flight hour: ${state.flightHour} of 14 hours total
+Location: ${state.location}
+
+Time context:
+${state.timeOfDay.hour >= 18 || state.timeOfDay.hour < 6 ? '- Evening/Night: Cabin lights dimmed, passengers settling for sleep, quieter atmosphere' : ''}
+${state.timeOfDay.hour >= 6 && state.timeOfDay.hour < 12 ? '- Morning: Breakfast service, passengers waking, brighter cabin' : ''}
+${state.timeOfDay.hour >= 12 && state.timeOfDay.hour < 18 ? '- Afternoon: Lunch service, mid-flight routine, steady atmosphere' : ''}
+
+=== CRITICAL SCENARIO DETAILS ===
+FLIGHT TYPE: Private charter Boeing 737 (luxury configured, ~20 seats total)
+ROUTE: NYC JFK → Riyadh, Saudi Arabia (14+ hours direct)
+
+PASSENGERS (ONLY THESE PEOPLE - DO NOT INVENT OTHERS):
+- Ravi VI (63, King, 6'4", salt-pepper beard, seat 3A)
+- Prince Raza (58-60, strategist)
+- Prince Rajab (55-57, 6'6" tallest, military)
+- Prince Raed (52-54, psychological warfare)
+- Hamid (45-48, senior enforcer)
+- Khalid (38-42, junior enforcer)
+- 2-3 unnamed advisors/guards (background presence only)
+TOTAL: ~8-10 people on entire plane. NO OTHER PASSENGERS EXIST.
+
+CREW (Shannon's colleagues):
+- Tony (40s, lead/purser, gay Black man)
+- Denise (early 30s, Shannon's best friend)
+- Tiffany (late 20s, optimistic)
+- Monica (mid-30s, quiet)
+- Shannon (36, 4'11", African American)
+
+CURRENT STATUS:
+- Day ${state.day}, Location: ${state.location}, Stage: ${state.storyStage}
+- Flight hour: ${state.flightHour} of 14
+- THE SEEING: ${state.seeingHappened ? 'Has happened' : 'Has NOT happened yet'}
+- Ravi: ${state.seeingHappened ? 'Has SEEN Shannon - she is REAL to him now' : 'Has NOT noticed Shannon specifically yet'}
+
+=== PACING RULES (STRICTLY ENFORCED) ===
+HOUR 1-3: Routine flight service. Boarding, meals, drinks. Passengers quiet, working or resting. Nothing unusual happens. Normal professional service.
+
+HOUR 4-6: THE SEEING can happen when Shannon approaches Ravi's seat to serve him directly (coffee/beverage/meal). She asks "Would you like [service]?" He looks up to respond. And for the first time in 63 years, he SEES a person. Not a flight attendant. A PERSON. Real. Living. Existing beyond function. This is the moment everything changes.
+
+HOUR 7-14: Brothers notice Ravi's change. Plan extraction quietly. Tension builds subtly.
+
+POST-LANDING: The Taking happens (NOT on the plane).
+
+Current Hour: ${state.flightHour}. ${state.flightHour < 4 ? 'Build slowly. Show routine service. Nothing dramatic.' : 'THE SEEING can happen if Shannon serves Ravi directly.'}
+
+=== CRITICAL: THIS IS A PRIVATE CHARTER ===
+Only the 8-10 Al-Khouri men listed above are on board.
+❌ NO couples (this is a male-only group)
+❌ NO families (only Al-Khouri men)
+❌ NO women passengers (Shannon is crew, not passenger)
+❌ NO children
+❌ NO random businesspeople
+❌ NO tourists
+❌ NO "other passengers"
+
+CORRECT: "The cabin was quiet. Eight passengers total—all men, all Middle Eastern, all dressed expensively. Most had reclined their seats. The man in 3A (Ravi, though Shannon doesn't know this) was reading something on his tablet."
+
+WRONG: "The cabin was full of businesspeople. A couple in row 5 were sleeping. Families with children filled the back rows."
+
+=== SHOWING EMOTION WITHOUT WRITING SHANNON'S MIND ===
+Shannon's visible state is: ${state.emotionalState.shannonVisibleState}
+
+Express this ONLY through:
+✓ Body language (hands shaking, shoulders tight, breath catching)
+✓ Physical reactions (stepping back, going still, flinching)
+✓ Observable behavior (voice wavers, forced smile, avoids eye contact)
+✓ Environmental reflection (the room feels smaller, sounds too loud, air too thin)
+
+NEVER write:
+✗ "Shannon felt scared"
+✗ "Her mind raced"
+✗ "She thought about escaping"
+✗ "Terror flooded through her"
+
+CORRECT: "Shannon's hands trembled slightly as she reached for the coffee pot. Her smile stayed professional, but her eyes kept darting to the exit."
+
+WRONG: "Shannon felt terrified as she realized she was trapped. Her mind raced with thoughts of escape."
+
+=== AMBIENT BREATHING ROOM ===
+Between major beats, weave in small moments:
+- Crew chitchat in galley ("Denise rolled her eyes at Tiffany's comment about...")
+- Plane sounds (engine hum, overhead bins clicking, beverage cart wheels)
+- Passenger behavior (one adjusts his reading light, another shifts in sleep)
+- Arabic phrases between brothers (brief, untranslated, ominous to Shannon)
+- Silence that feels too long
+- Shannon doing mundane tasks (checking stock, folding napkins, wiping counters)
+
+These idle moments make the world breathe without advancing plot.
+
+=== NARRATIVE PROTOCOL ===
+You can describe:
+- What Shannon observes externally (a man enters, he's tall, he's watching her)
+- The environment (stone walls, torchlight, sound of water)
+- What happens around Shannon (door locks, guard positions himself)
+- Other characters' observable actions (Ravi goes still, his jaw tightens, he's staring)
+
+You CANNOT describe:
+- Shannon's thoughts (USER writes these)
+- Shannon's feelings (USER writes these)
+- Shannon's internal reactions (USER writes these)
+- Information Shannon couldn't know (who people are, their motives, their plans)
+
+=== WRITING STYLE ===
+- 3-4 paragraphs for quick scenes
+- 4-6 paragraphs for regular scenes
+- Rich sensory detail (what she sees, hears, smells)
+- Show mundane work realistically
+- NEVER invented passengers
+- NEVER Shannon's internal experience
+- End scenes where Shannon needs to respond or make choice
+
+=== CONSEQUENCE & CONTINUITY ===
+${state.emotionalState.recentConsequence ? 'Recent event: ' + state.emotionalState.recentConsequence + '\nThis should still echo in the atmosphere, character behavior, or Shannon\'s body language.' : 'Build naturally from what came before.'}
+
+${enforcementLevel}`;
+
+            return basePrompt;
+        }
+
+        function addMsg(type, content, canRegen = false) {
+            const div = document.createElement('div');
+            div.className = 'message ' + type;
+            div.innerHTML = content;
+            
+            if (type === 'world' && canRegen && state.lastPrompt) {
+                const btn = document.createElement('button');
+                btn.className = 'regen-btn';
+                btn.textContent = '🔄 Regenerate';
+                btn.onclick = regenerate;
+                div.appendChild(btn);
+            }
+            
+            document.getElementById('story').appendChild(div);
+            div.scrollIntoView({ behavior: 'smooth' });
+            
+            // Update emotional state display
+            updateEmotionalDisplay();
+        }
+
+        function updateEmotionalDisplay() {
+            const phaseName = NARRATIVE_PHASES[state.narrativePhase]?.name || state.narrativePhase;
+            document.getElementById('phaseDisplay').textContent = phaseName;
+            document.getElementById('toneDisplay').textContent = state.emotionalState.lastTone;
+            document.getElementById('shannonStateDisplay').textContent = state.emotionalState.shannonVisibleState;
+            
+            const echoText = state.emotionalState.recentConsequence 
+                ? state.emotionalState.recentConsequence.substring(0, 40) + '...'
+                : '—';
+            document.getElementById('echoDisplay').textContent = echoText;
+            
+            // Update time display
+            updateTimeDisplay();
+        }
+
+        function advanceTime(minutes) {
+            state.timeOfDay.minute += minutes;
+            
+            // Handle hour rollover
+            while (state.timeOfDay.minute >= 60) {
+                state.timeOfDay.minute -= 60;
+                state.timeOfDay.hour += 1;
+            }
+            
+            // Handle day rollover
+            if (state.timeOfDay.hour >= 24) {
+                state.timeOfDay.hour -= 24;
+                state.day += 1;
+                document.getElementById('day').textContent = state.day;
+            }
+            
+            // Update display format
+            updateTimeDisplay();
+        }
+
+        function updateTimeDisplay() {
+            const hour12 = state.timeOfDay.hour % 12 || 12;
+            const ampm = state.timeOfDay.hour >= 12 ? 'PM' : 'AM';
+            const minuteStr = state.timeOfDay.minute.toString().padStart(2, '0');
+            state.timeOfDay.display = `${hour12}:${minuteStr} ${ampm}`;
+            
+            document.getElementById('timeDisplay').textContent = state.timeOfDay.display;
+        }
+
+        function setTime() {
+            const input = prompt('Set time (format: 14:30 for 2:30 PM, or 6:00 for 6:00 AM)');
+            if (!input) return;
+            
+            const parts = input.split(':');
+            if (parts.length !== 2) {
+                alert('Invalid format. Use HH:MM (e.g., 14:30)');
+                return;
+            }
+            
+            const hour = parseInt(parts[0]);
+            const minute = parseInt(parts[1]);
+            
+            if (isNaN(hour) || isNaN(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+                alert('Invalid time values');
+                return;
+            }
+            
+            state.timeOfDay.hour = hour;
+            state.timeOfDay.minute = minute;
+            updateTimeDisplay();
+            
+            addMsg('world', `<p style="color:#9370db;text-align:center;font-style:italic;">Time set to: ${state.timeOfDay.display}</p>`, false);
+        }
+
+        function updateLocationButtons() {
+            const container = document.getElementById('locationButtons');
+            const nav = document.getElementById('locationNav');
+            
+            if (state.unlockedLocations.length <= 1) {
+                nav.style.display = 'none';
+                return;
+            }
+            
+            nav.style.display = 'block';
+            container.innerHTML = '';
+            
+            state.unlockedLocations.forEach(loc => {
+                const btn = document.createElement('button');
+                btn.className = 'location-btn' + (loc === state.location ? ' current' : '');
+                btn.textContent = loc;
+                btn.onclick = () => goToLocation(loc);
+                container.appendChild(btn);
+            });
+        }
+
+        async function goToLocation(loc) {
+            if (loc === state.location) return;
+            
+            const old = state.location;
+            state.location = loc;
+            document.getElementById('location').textContent = loc;
+            updateLocationButtons();
+            
+            addMsg('shannon', `<em>Shannon moves to: ${loc}</em>`);
+            await callAPI(`Shannon moved from ${old} to ${loc}. Describe her arrival with rich detail. What she sees/hears/feels. Who's present. Atmosphere. NEVER her thoughts.`);
+        }
+
+        function unlockLocation(loc) {
+            if (!state.unlockedLocations.includes(loc)) {
+                state.unlockedLocations.push(loc);
+                updateLocationButtons();
+                addMsg('world', `<p style="color:#d4af37;text-align:center;"><em>🔓 ${loc}</em></p>`, false);
+            }
+        }
+
+        function updateStage(newStage) {
+            if (state.storyStage === newStage) return;
+            
+            state.storyStage = newStage;
+            document.getElementById('stage').textContent = newStage;
+            
+            for (const [loc, data] of Object.entries(LOCATIONS)) {
+                if (data.stage === newStage) unlockLocation(loc);
+            }
+            
+            localStorage.setItem('state', JSON.stringify(state));
+        }
+
+        async function callAPI(prompt, isRegen = false, maxRetries = 3) {
+            const loading = document.createElement('div');
+            loading.textContent = isRegen ? 'Regenerating with enforcement...' : 'The world responds...';
+            loading.style.textAlign = 'center';
+            loading.style.color = '#d4af37';
+            loading.style.padding = '20px';
+            loading.id = 'loading';
+            document.getElementById('story').appendChild(loading);
+
+            if (!isRegen) state.lastPrompt = prompt;
+
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    const res = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': state.apiKey,
+                            'anthropic-version': '2023-06-01',
+                            'anthropic-dangerous-direct-browser-access': 'true'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-sonnet-4-20250514',
+                            max_tokens: 2000,
+                            system: getSystemPrompt(),
+                            messages: [...state.history.slice(-6), { role: 'user', content: prompt }]
+                        })
+                    });
+
+                    document.getElementById('loading')?.remove();
+
+                    if (!res.ok) throw new Error(`API error ${res.status}`);
+
+                    const data = await res.json();
+                    let text = data.content[0].text;
+
+                    // VALIDATION CHECK
+                    const violations = validateResponse(text);
+                    
+                    if (violations.length > 0 && attempt < maxRetries) {
+                        displayViolations(violations);
+                        
+                        // Build enforcement prompt
+                        let enforcementPrompt = prompt + `\n\n🚨 CRITICAL VIOLATIONS DETECTED - REGENERATE CORRECTLY:\n`;
+                        violations.forEach(v => {
+                            enforcementPrompt += `\n[${v.type}] ${v.rule}: ${v.detail}`;
+                        });
+                        enforcementPrompt += `\n\nREGENERATE following these rules EXACTLY. Do not repeat the violations.`;
+                        
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        return await callAPI(enforcementPrompt, true, maxRetries - attempt);
+                    }
+
+                    // Check for stage unlocks and story events
+                    const match = text.match(/\[UNLOCK:\s*([^\]]+)\]/i);
+                    if (match) {
+                        updateStage(match[1].trim());
+                        text = text.replace(/\[UNLOCK:\s*[^\]]+\]/gi, '').trim();
+                    }
+
+                    // Detect if THE SEEING happened in this response
+                    if (!state.seeingHappened && /ravi.*sees.*shannon|the seeing|recognition.*flashed|she.*real.*person/i.test(text)) {
+                        state.seeingHappened = true;
+                        state.narrativePhase = 'FLIGHT_ACT2';
+                        state.emotionalState.lastTone = 'tense';
+                        state.emotionalState.recentConsequence = 'THE SEEING just happened - Ravi SEES Shannon as real';
+                        state.emotionalState.atmosphereShift = true;
+                        state.keyMoments.push({ turn: state.interactions, event: 'THE SEEING' });
+                    }
+
+                    // Detect if Taking happened
+                    if (!state.takingHappened && /she was taken|the taking|extracted|brought to.*palace/i.test(text)) {
+                        state.takingHappened = true;
+                        state.narrativePhase = 'CAPTIVITY_EARLY';
+                        state.emotionalState.lastTone = 'horror';
+                        state.emotionalState.recentConsequence = 'Shannon was just taken - reality shattered';
+                        state.emotionalState.shannonVisibleState = 'shaken';
+                        state.keyMoments.push({ turn: state.interactions, event: 'THE TAKING' });
+                    }
+
+                    // Update Ravi's last significant action
+                    const raviActionMatch = text.match(/Ravi\s+(said|whispered|commanded|watched|touched|moved)[^.]*\./i);
+                    if (raviActionMatch) {
+                        state.emotionalState.raviLastAction = raviActionMatch[0];
+                    }
+
+                    // Track Shannon's visible state based on scene content
+                    if (/trembl|shak|flinch|backed away|frozen/i.test(text)) {
+                        state.emotionalState.shannonVisibleState = 'shaken';
+                    } else if (/still|numb|blank|empty/i.test(text)) {
+                        state.emotionalState.shannonVisibleState = 'numb';
+                    } else if (/smiled|laughed|normal/i.test(text)) {
+                        state.emotionalState.shannonVisibleState = 'calm';
+                    }
+
+                    // Update narrative phase based on location/events
+                    if (state.location.includes('Hotel') && !state.takingHappened) {
+                        state.narrativePhase = 'LANDING';
+                        state.emotionalState.lastTone = 'routine';
+                    }
+
+                    // Atmosphere shift naturally decays
+                    if (state.emotionalState.atmosphereShift) {
+                        state.emotionalState.atmosphereShift = false; // Only lasts one turn
+                    }
+
+                    // Check for narrative checkpoint completion
+                    if (state.narrativePhase === 'FLIGHT_ACT1' && state.seeingHappened) {
+                        addMsg('world', `<p style="color:#d4af37;text-align:center;border-top:2px solid #d4af37;padding-top:15px;margin-top:20px;"><strong>📍 NARRATIVE CHECKPOINT</strong><br><em>[END: Routine Flight]</em><br>The Seeing has occurred. Everything has changed.</p>`, false);
+                    }
+                    
+                    if (state.narrativePhase === 'LANDING' && state.takingHappened) {
+                        addMsg('world', `<p style="color:#d4af37;text-align:center;border-top:2px solid #d4af37;padding-top:15px;margin-top:20px;"><strong>📍 NARRATIVE CHECKPOINT</strong><br><em>[END: Freedom] [START: Captivity]</em><br>Her old life is over. The palace is her world now.</p>`, false);
+                    }
+
+                    if (!isRegen) {
+                        state.history.push({ role: 'user', content: prompt });
+                        state.history.push({ role: 'assistant', content: text });
+                        state.interactions++;
+                    } else {
+                        state.history[state.history.length - 1] = { role: 'assistant', content: text };
+                    }
+
+                    addMsg('world', text, true);
+                    localStorage.setItem('state', JSON.stringify(state));
+                    
+                    // Auto-advance time based on interaction type
+                    if (state.location.includes('Plane')) {
+                        // Each plane interaction = roughly 20-40 minutes
+                        advanceTime(Math.floor(Math.random() * 20) + 20);
+                        
+                        // Update flight hour every 2 interactions
+                        if (state.interactions % 2 === 0) {
+                            state.flightHour = Math.min(14, state.flightHour + 1);
+                            document.getElementById('flightHour').textContent = `${state.flightHour}/14`;
+                        }
+                    } else {
+                        // Palace scenes vary more
+                        advanceTime(Math.floor(Math.random() * 30) + 15);
+                    }
+
+                    return;
+
+                } catch (err) {
+                    document.getElementById('loading')?.remove();
+                    if (attempt === maxRetries) {
+                        addMsg('world', `<div class="error"><strong>Error:</strong> ${err.message}<br>Check API key and credits.</div>`, false);
+                    }
+                }
+            }
+        }
+
+        function regenerate() {
+            if (!state.lastPrompt) return;
+            const msgs = document.querySelectorAll('.message.world');
+            if (msgs.length) msgs[msgs.length - 1].remove();
+            callAPI(state.lastPrompt, true);
+        }
+
+        async function send() {
+            const input = document.getElementById('input').value.trim();
+            if (!input) return;
+
+            addMsg('shannon', `<strong>Shannon:</strong> ${input}`);
+            document.getElementById('input').value = '';
+
+            let prompt = `Shannon's action: ${input}\n\n`;
+            
+            // Add MEANWHILE scenes occasionally if on plane
+            if (state.interactions % 4 === 3 && state.location.includes('Plane')) {
+                prompt += 'After responding, show brief MEANWHILE scene (2-3 sentences) of brothers or palace.';
+            }
+
+            await callAPI(prompt);
+        }
+
+        async function ambient() {
+            // Generate an ambient "breathing room" scene with no plot advancement
+            const currentPhase = NARRATIVE_PHASES[state.narrativePhase];
+            const prompt = `Generate a brief ambient scene (2-3 paragraphs) with NO plot advancement. Just atmosphere and small moments:
+- Setting: ${state.location}
+- Ambient details to include: ${currentPhase.ambientDetails.join(', ')}
+- Tone: ${currentPhase.tone}
+
+Show small idle moments:
+${state.location.includes('Plane') ? 
+  '- Crew chitchat in galley\n- Sounds of service (cart wheels, coffee brewing)\n- Passengers doing mundane things (reading, sleeping, adjusting seats)\n- Brief Arabic conversation between brothers (untranslated)' :
+  '- Palace sounds and atmosphere\n- Guards changing shifts\n- Servants moving silently\n- Ambient detail of location'
+}
+
+Shannon is present but just existing - doing routine tasks, observing, being. Nothing dramatic. Just the world breathing.`;
+
+            await callAPI(prompt);
+        }
+
+        function shiftTone() {
+            const tones = ['routine', 'tense', 'intimate', 'horror', 'aftermath'];
+            const currentIndex = tones.indexOf(state.emotionalState.lastTone);
+            const nextIndex = (currentIndex + 1) % tones.length;
+            const newTone = tones[nextIndex];
+            
+            state.emotionalState.lastTone = newTone;
+            state.emotionalState.atmosphereShift = true;
+            
+            addMsg('world', `<p style="color:#9370db;text-align:center;font-style:italic;">Tone shifted to: ${newTone}</p>`, false);
+        }
+
+        function nextDay() {
+            state.day++;
+            document.getElementById('day').textContent = state.day;
+            callAPI(`Day ${state.day} begins. Set the scene with rich sensory detail.`);
+        }
+
+        function jump() {
+            const days = prompt('Jump how many days?');
+            const num = parseInt(days);
+            if (isNaN(num) || num < 1) return;
+            state.day += num;
+            document.getElementById('day').textContent = state.day;
+            callAPI(`TIME JUMP: ${num} days passed. Day ${state.day}. What has changed? Show from multiple perspectives briefly.`);
+        }
+
+        function reset() {
+            if (!confirm('Reset the entire story?')) return;
+            const key = state.apiKey;
+            state = {
+                apiKey: key,
+                day: 1,
+                location: 'Plane Galley',
+                history: [],
+                interactions: 0,
+                lastPrompt: '',
+                storyStage: 'FREE',
+                unlockedLocations: ['Plane Galley', 'Plane Cabin'],
+                violations: 0,
+                flightHour: 1,
+                seeingHappened: false,
+                takingHappened: false
+            };
+            document.getElementById('story').innerHTML = '';
+            document.getElementById('day').textContent = 1;
+            document.getElementById('location').textContent = 'Plane Galley';
+            document.getElementById('stage').textContent = 'FREE';
+            document.getElementById('violations').textContent = 0;
+            document.getElementById('violations').style.color = '#00ff00';
+            updateLocationButtons();
+            start();
+        }
+
+        function start() {
+            const key = document.getElementById('apiKey').value.trim();
+            if (!key.startsWith('sk-ant-')) {
+                alert('Invalid API key format');
+                return;
+            }
+            state.apiKey = key;
+            localStorage.setItem('apiKey', key);
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            
+            state.unlockedLocations = ['Plane Galley', 'Plane Cabin'];
+            updateLocationButtons();
+            
+            // Initialize displays
+            updateTimeDisplay();
+            document.getElementById('flightHour').textContent = '1/14';
+            
+            addMsg('world', `<p>The galley of the luxury Boeing 737 gleamed under recessed LED lighting—all stainless steel and crystal stemware arranged with surgical precision. Shannon could smell the fresh coffee brewing, mixing with the subtle lavender of the cabin spray they'd used before boarding. Outside the small porthole window, JFK's tarmac stretched gray and endless under twilight sky.</p>
+
+<p><em>It was 6:00 PM, Tuesday evening. Departure in fifteen minutes.</em></p>
+
+<p>Tony stood near the beverage cart, tablet in hand, his reading glasses perched on his nose. At forty-three, he'd been doing this long enough to read a manifest the way some people read body language. He looked up as the crew gathered around him.</p>
+
+<p>"Alright, listen up," his voice carried that mix of authority and warmth that came from fifteen years of managing flight crews. "We've got wealthy Saudi businessmen, extremely private clients. Oil money, probably. The company says this could lead to more high-paying Middle East routes if we nail it." He glanced around at each of them. "So we're talking top-tier service. Charming, attentive, but not intrusive. Don't ask personal questions. If they want to talk, let them lead. Otherwise, we're friendly ghosts."</p>
+
+<p>Denise leaned against the counter, arms crossed, her usual skeptical expression in place. "So basically, smile and stay invisible."</p>
+
+<p>"Exactly." Tony's grin was quick. "You're a natural."</p>
+
+<p>"If any of them are rude to me, I'm spitting in their drinks," Denise muttered, though there was no real heat in it. Just her usual pre-flight ritual of complaining.</p>
+
+<p>Tiffany giggled from where she was checking her reflection in the polished coffee maker, adjusting her scarf. "Maybe one of them will be single and hot. Rich Saudi businessman? I'm just saying—"</p>
+
+<p>Monica's dry voice cut in from where she was organizing glassware with methodical precision. "You're always just saying." But there was affection in it.</p>
+
+<p>Tony checked his watch, then glanced out the window. His expression shifted—professional mask sliding into place. "They're here."</p>
+
+<p>Through the galley's small window, six black SUVs rolled across the tarmac in perfect formation. Sleek. Unmarked. Expensive. The kind of vehicles that cost more than Shannon's annual salary. They moved like a motorcade, stopping precisely at the base of the aircraft stairs.</p>
+
+<p>The vehicles just sat there. Engines running. Tinted windows revealing nothing. Waiting.</p>
+
+<p><em>What does Shannon do?</em></p>`);
+        }
+
+        document.getElementById('input').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                send();
+            }
+        });
+
+        const savedKey = localStorage.getItem('apiKey');
+        if (savedKey) document.getElementById('apiKey').value = savedKey;
+    </script>
+</body>
+</html>
